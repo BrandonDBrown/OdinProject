@@ -1,0 +1,22 @@
+.btn {
+	border-radius:0px;
+}
+.col-md-2, .col-md-1, .col-md-offset-3 {
+	height:50px;
+}
+
+.row1 {
+	padding-top:100px;
+}
+
+.screen {
+	height:75px;
+	background-color: black;
+	color:white;
+	font-size:50px;
+	text-align:right;
+}
+
+#clear {
+	height:75px;
+}
