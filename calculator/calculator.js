@@ -7,10 +7,9 @@ var buttonOperations = {
 	'=': false
 }
 
-var currentNumber = 0;
+var firstNumber = 0;
 var operator = '';
 var screenOutput = document.getElementById("output");
-var equationArray = []
 
 //EVENT LISTENERS
 
@@ -32,6 +31,7 @@ document.getElementById("clear").addEventListener("click", clearAll);
 //equals
 document.getElementById("equals").addEventListener("click", equals);
 
+
 function equation() {
 	firstNumber = parseInt(screenOutput.innerHTML);
 	operator = this.innerHTML;
@@ -43,7 +43,7 @@ function clearAll() {
 };
 
 function number() {
-	if(buttonOperations['='] == false) {
+	if(buttonOperations['='] === false) {
 		screenOutput.innerHTML += this.innerHTML;
 	} else {
 		buttonOperations['='] = false;
