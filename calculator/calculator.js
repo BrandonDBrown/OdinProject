@@ -57,4 +57,4 @@ function equals() {
 	clearAll();
 	screenOutput.innerHTML = buttonOperations[operator](firstNumber, secondNumber);
 	buttonOperations['='] = true;
-};
+}
