@@ -5,9 +5,6 @@ $(function(){
   food();
 });
 
-var speed = 150;
-var direction = 'r';
-
 var grid = {
   gridX: 40,
   gridY: 40,
@@ -23,24 +20,23 @@ var grid = {
 };
 
 var worm = {
-  initialPosition: [20,20],
-  initialDirection: 'r',
+  direction: 'r',
   currentPosition: [[20,20],[20,19],[20,18],[20,17],[20,16]],
   segments: 4,
+  speed: 150,
   eat: function() {
           if($('.container .row:nth-child('+worm.currentPosition[0][0]+') .unit:nth('+worm.currentPosition[0][1]+')').hasClass('food')) {
             food();
-            $('.container .row:nth-child('+worm.currentPosition[0][0]+') .unit:nth('+worm.currentPosition[0][1]+')').removeClass('food');
             worm.currentPosition.push([worm.currentPosition[worm.segments-1][0], worm.currentPosition[worm.segments-1][1]]);
             worm.segments +=1;
-            speed-=5;
+            worm.speed -=5;
           }
-       },
+       }
 };
 
 function move() {
   if (worm.currentPosition[0][1] === -1 || worm.currentPosition[0][1] === 40 || worm.currentPosition[0][0] === 41 || worm.currentPosition[0][0] === 0) {
-    gameOver();
+    restartGame();
   } else {
     $('.container .row:nth-child('+worm.currentPosition[0][0]+') .unit:nth('+worm.currentPosition[0][1]+')').removeClass('worm');
       for(i=worm.currentPosition.length-1; i>0; i--) {
@@ -49,63 +45,47 @@ function move() {
         worm.currentPosition[i][1] = worm.currentPosition[i-1][1];
       }
   }
-    if (direction === 'r') {
+
+    if (worm.direction === 'r') {
         worm.currentPosition[0][1] += 1;
-    } else if (direction === 'l') {
+    } else if (worm.direction === 'l') {
         worm.currentPosition[0][1] -= 1;
-    } else if (direction === 'u') {
+    } else if (worm.direction === 'u') {
         worm.currentPosition[0][0] -= 1;
     } else {
         worm.currentPosition[0][0] += 1;
     }
+
     worm.eat();
       for(i=0;i<worm.segments; i++) {
         if(worm.currentPosition[0][0] === worm.currentPosition[i+1][0] && worm.currentPosition[0][1] === worm.currentPosition[i+1][1]) {
-          gameOver();
+          restartGame();
         } else {
           $('.container .row:nth-child('+worm.currentPosition[i][0]+') .unit:nth('+worm.currentPosition[i][1]+')').addClass('worm');
         }
       }
-  setTimeout(move, speed);
+  setTimeout(move, worm.speed);
 }
 
-function gameOver() {
+function restartGame() {
   $('.container .row:nth-child('+worm.currentPosition[0][0]+') .unit:nth('+worm.currentPosition[0][1]+')').removeClass('worm');
   worm.currentPosition[0] = [20,20];
   worm.segments = 4;
-  direction = 'r';
-  $('.container .row:nth-child('+worm.currentPosition[0][0]+') .unit:nth('+worm.currentPosition[0][1]+')').addClass('worm');
-  return alert('Game Over');
+  worm.direction = 'r';
+  alert("Ready to restart?");
 }
 
 function food() {
+  $('.container .row:nth-child('+worm.currentPosition[0][0]+') .unit:nth('+worm.currentPosition[0][1]+')').removeClass('food');
   var x = Math.floor((Math.random() * 39)+1);
   var y = Math.floor((Math.random() * 39));
   $('.container .row:nth-child('+x+') .unit:nth('+y+')').addClass('food');
 }
 
-// var compassRose = {
-//   39: 'r',
-//   37: 'l',
-//   38: 'u',
-//   40: 'd'
-// };
 function directing() {
   $(document.body).on('keydown',function(event) {
-      var keyCode = ['r','l','u','d'];
-      // direction = event.which;
-      if(event.which === 39){
-        // right
-        direction = keyCode[0];
-      } else if (event.which === 37){
-        // left
-        direction = keyCode[1];
-      } else if (event.which === 38){
-        // up
-        direction = keyCode[2];
-      } else if(event.which === 40) {
-        // down
-        direction = keyCode[3];
-      }
+      var keys = ['r','l','u','d'];
+      var codes = [39, 37, 38, 40];
+      worm.direction = keys[codes.indexOf(event.which)];
   });
 }
